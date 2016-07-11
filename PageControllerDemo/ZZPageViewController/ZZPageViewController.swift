@@ -14,12 +14,12 @@ class ZZPageViewController: UIViewController {
     
     // ------------------------------------------------------------------------------
     // Configure when initializer
-    var images: [String]!
+    var imagesName: [String]!
     
     // ------------------------------------------------------------------------------
     
     // Optinal
-    var titles: [String]?
+    var pagesTitle: [String]?
     
     // All have default setted
     var allowedRecursive: Bool = false
@@ -48,7 +48,7 @@ class ZZPageViewController: UIViewController {
     private let titleLabelHeight: CGFloat = 30
     private lazy var titleFrame: CGRect = { [weak self] in
         if let strongSelf = self {
-            if strongSelf.titles == nil {
+            if strongSelf.pagesTitle == nil {
                 return CGRectZero
             }
             let x: CGFloat = 0
@@ -86,7 +86,7 @@ class ZZPageViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if titles != nil && titles?.count != images.count {
+        if pagesTitle != nil && pagesTitle?.count != imagesName.count {
             print("Warning: If you set titles, then titles count must equal images count")
             abort()
         }
@@ -115,7 +115,7 @@ class ZZPageViewController: UIViewController {
 
     @objc private func setPageController() {
         pageController = UIPageControl(frame: pageControllerFrame)
-        pageController.numberOfPages = images.count
+        pageController.numberOfPages = imagesName.count
         pageController.pageIndicatorTintColor = pageIndicatorTintColor
         pageController.currentPageIndicatorTintColor = currentPageIndicatorTintColor
         pageController.addTarget(self, action: #selector(ZZPageViewController.valueChangeAction), forControlEvents: .ValueChanged)
@@ -136,15 +136,15 @@ class ZZPageViewController: UIViewController {
     }
     
     @objc private func viewControllerAtIndex(index: Int) -> UIViewController? {
-        if images.count == 0 || index >= images.count {
+        if imagesName.count == 0 || index >= imagesName.count {
             return nil
         }
         let pageContentViewControllr = ZZPageContentViewController()
-        if titles != nil {
-            pageContentViewControllr.pageTitle = titles![index]
+        if pagesTitle != nil {
+            pageContentViewControllr.pageTitle = pagesTitle![index]
         }
         pageContentViewControllr.labelFrame = titleFrame
-        pageContentViewControllr.imageFile = images[index]
+        pageContentViewControllr.imageFile = imagesName[index]
         pageContentViewControllr.pageIndex = index
 
         return pageContentViewControllr
@@ -164,7 +164,7 @@ extension ZZPageViewController: UIPageViewControllerDataSource {
         
         if allowedRecursive {
             if index == 0 {
-                index = images.count - 1
+                index = imagesName.count - 1
                 return viewControllerAtIndex(index)
             }
         } else {
@@ -182,12 +182,12 @@ extension ZZPageViewController: UIPageViewControllerDataSource {
         index = index + 1
         
         if allowedRecursive {
-            if index == images.count {
+            if index == imagesName.count {
                 index = 0
                 return viewControllerAtIndex(index)
             }
         } else {
-            if index == images.count {
+            if index == imagesName.count {
                 // MARK: TO-DO [Add action, if you want]
                 return nil
             }
