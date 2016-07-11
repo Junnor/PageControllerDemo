@@ -17,10 +17,8 @@ class ViewController: UIViewController {
         
         pageViewController = ZZPageViewController()
         pageViewController.images = ["login1", "login2", "login3"]
-//        pageViewController.titles = ["Page 0", "Page 1", "Page 2"]
-        
-        pageViewController.pageControllerY = view.bounds.size.height / 2
-        
+        pageViewController.titles = ["Page 0", "Page 1", "Page 2"]
+                
         addChildViewController(pageViewController)
         pageViewController.didMoveToParentViewController(self)
         view.addSubview(pageViewController.view)

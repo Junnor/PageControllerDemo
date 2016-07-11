@@ -2,7 +2,7 @@
 //  ZZPageViewController.swift
 //  PageT
 //
-//  Created by Ju on 16/5/27.
+//  Created by Ju on 16/7/11.
 //  Copyright © 2016年 Ju. All rights reserved.
 //
 
@@ -38,7 +38,7 @@ class ZZPageViewController: UIViewController {
     }()
     
     lazy var titleY: CGFloat = {
-        return 30
+        return 100
     }()
     // ------------------------------------------------------------------------------
 
@@ -85,6 +85,11 @@ class ZZPageViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if titles != nil && titles?.count != images.count {
+            print("Warning: If you set titles, then titles count must equal images count")
+            abort()
+        }
         
         setPageViewController()
         setPageController()
@@ -183,7 +188,7 @@ extension ZZPageViewController: UIPageViewControllerDataSource {
             }
         } else {
             if index == images.count {
-                // MARK: TO-DO [Add present view controller stuff, if you want]
+                // MARK: TO-DO [Add action, if you want]
                 return nil
             }
         }
