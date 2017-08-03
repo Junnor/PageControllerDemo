@@ -26,8 +26,8 @@ class ZZPageViewController: UIViewController {
     var hidePageController: Bool = false
     
     // Indicator color
-    var pageIndicatorTintColor: UIColor = UIColor.grayColor()
-    var currentPageIndicatorTintColor: UIColor = UIColor.blackColor()
+    var pageIndicatorTintColor: UIColor = UIColor.gray
+    var currentPageIndicatorTintColor: UIColor = UIColor.black
     
     // Y position
     lazy var pageControllerY: CGFloat = { [weak self] in
@@ -45,41 +45,41 @@ class ZZPageViewController: UIViewController {
     // MARK: - Private Properties
 
     // Frame of title label & page controller
-    private let titleLabelHeight: CGFloat = 30
-    private lazy var titleFrame: CGRect = { [weak self] in
+    fileprivate let titleLabelHeight: CGFloat = 30
+    fileprivate lazy var titleFrame: CGRect = { [weak self] in
         if let strongSelf = self {
             if strongSelf.pagesTitle == nil {
-                return CGRectZero
+                return CGRect.zero
             }
             let x: CGFloat = 0
             let y: CGFloat = strongSelf.titleY - strongSelf.titleLabelHeight
             let width: CGFloat = strongSelf.view.bounds.size.width
             let heigth: CGFloat = strongSelf.titleLabelHeight
-            return CGRectMake(x, y, width, heigth)
+            return CGRect(x: x, y: y, width: width, height: heigth)
         }
-        return CGRectZero
+        return CGRect.zero
     }()
     
-    private let pageControllerHeight: CGFloat = 50
-    private lazy var pageControllerFrame: CGRect = { [weak self] in
+    fileprivate let pageControllerHeight: CGFloat = 50
+    fileprivate lazy var pageControllerFrame: CGRect = { [weak self] in
         if let strongSelf = self {
             let x: CGFloat = 0
             let y: CGFloat = strongSelf.pageControllerY - strongSelf.pageControllerHeight
             let width = strongSelf.view.bounds.size.width
             let height: CGFloat = strongSelf.pageControllerHeight
-            return CGRectMake(x, y, width, height)
+            return CGRect(x: x, y: y, width: width, height: height)
         }
-        return CGRectZero
+        return CGRect.zero
     }()
     
     // Page container
-    private var pageViewController: UIPageViewController!
+    fileprivate var pageViewController: UIPageViewController!
     
     // Custom pageController
-    private var pageController: UIPageControl!
+    fileprivate var pageController: UIPageControl!
     
     // Track the index of pageController
-    private var lastPageIndex = 0
+    fileprivate var lastPageIndex = 0
     
     // MARK: - View Controller lifecycle
     
@@ -97,45 +97,45 @@ class ZZPageViewController: UIViewController {
     
     // MARK: - Helper
     
-    @objc private func setPageViewController() {
-        pageViewController = UIPageViewController(transitionStyle: .Scroll, navigationOrientation: .Horizontal, options: nil)
+    @objc fileprivate func setPageViewController() {
+        pageViewController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
         pageViewController.dataSource = self
         pageViewController.delegate = self
         
         let startingContentViewController = viewControllerAtIndex(0)
         let viewControllers = [startingContentViewController!]
-        pageViewController.setViewControllers(viewControllers, direction: .Forward, animated: true, completion: nil)
+        pageViewController.setViewControllers(viewControllers, direction: .forward, animated: true, completion: nil)
         
         pageViewController.view.frame = view.bounds
         
         addChildViewController(pageViewController)
         view.addSubview(pageViewController.view)
-        pageViewController.didMoveToParentViewController(self)
+        pageViewController.didMove(toParentViewController: self)
     }
 
-    @objc private func setPageController() {
+    @objc fileprivate func setPageController() {
         pageController = UIPageControl(frame: pageControllerFrame)
         pageController.numberOfPages = imagesName.count
         pageController.pageIndicatorTintColor = pageIndicatorTintColor
         pageController.currentPageIndicatorTintColor = currentPageIndicatorTintColor
-        pageController.addTarget(self, action: #selector(ZZPageViewController.valueChangeAction), forControlEvents: .ValueChanged)
+        pageController.addTarget(self, action: #selector(ZZPageViewController.valueChangeAction), for: .valueChanged)
         view.addSubview(pageController)
-        view.bringSubviewToFront(pageController)
+        view.bringSubview(toFront: pageController)
         
         // Hide? pageViewController
-        pageController.hidden = hidePageController
+        pageController.isHidden = hidePageController
     }
     
-    @objc private func valueChangeAction() {
+    @objc fileprivate func valueChangeAction() {
         let vc = viewControllerAtIndex(pageController.currentPage)
         let viewControllers = [vc!]
-        let direction: UIPageViewControllerNavigationDirection = pageController.currentPage > lastPageIndex ? .Forward : .Reverse
+        let direction: UIPageViewControllerNavigationDirection = pageController.currentPage > lastPageIndex ? .forward : .reverse
         lastPageIndex = pageController.currentPage
         
         pageViewController.setViewControllers(viewControllers, direction: direction, animated: true, completion: nil)
     }
     
-    @objc private func viewControllerAtIndex(index: Int) -> UIViewController? {
+    @objc fileprivate func viewControllerAtIndex(_ index: Int) -> UIViewController? {
         if imagesName.count == 0 || index >= imagesName.count {
             return nil
         }
@@ -156,7 +156,7 @@ class ZZPageViewController: UIViewController {
 
 extension ZZPageViewController: UIPageViewControllerDataSource {
     
-    func pageViewController(pageViewController: UIPageViewController, viewControllerBeforeViewController viewController: UIViewController) -> UIViewController? {
+    func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
         let pageContentViewController = viewController as! ZZPageContentViewController
         var index = pageContentViewController.pageIndex
         
@@ -165,26 +165,26 @@ extension ZZPageViewController: UIPageViewControllerDataSource {
         if allowedRecursive {
             if index == 0 {
                 index = imagesName.count - 1
-                return viewControllerAtIndex(index)
+                return viewControllerAtIndex(index!)
             }
         } else {
             if index == 0 { return nil }
         }
         
-        index = index - 1
-        return viewControllerAtIndex(index)
+        index = index! - 1
+        return viewControllerAtIndex(index!)
     }
     
-    func pageViewController(pageViewController: UIPageViewController, viewControllerAfterViewController viewController: UIViewController) -> UIViewController? {
+    func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
         let pageContentViewController = viewController as! ZZPageContentViewController
         var index = pageContentViewController.pageIndex
         if index == NSNotFound { return nil }
-        index = index + 1
+        index = index! + 1
         
         if allowedRecursive {
             if index == imagesName.count {
                 index = 0
-                return viewControllerAtIndex(index)
+                return viewControllerAtIndex(index!)
             }
         } else {
             if index == imagesName.count {
@@ -193,7 +193,7 @@ extension ZZPageViewController: UIPageViewControllerDataSource {
             }
         }
         
-        return viewControllerAtIndex(index)
+        return viewControllerAtIndex(index!)
     }
 }
 
@@ -202,12 +202,12 @@ extension ZZPageViewController: UIPageViewControllerDataSource {
 extension ZZPageViewController: UIPageViewControllerDelegate {
     
     // For the custom pageController
-    func pageViewController(pageViewController: UIPageViewController, willTransitionToViewControllers pendingViewControllers: [UIViewController]) {
+    func pageViewController(_ pageViewController: UIPageViewController, willTransitionTo pendingViewControllers: [UIViewController]) {
         let firstPageContentViewController = pendingViewControllers.first! as! ZZPageContentViewController
         pageController.currentPage = firstPageContentViewController.pageIndex
     }
     
-    func pageViewController(pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
+    func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
         lastPageIndex = pageController.currentPage
     }
     

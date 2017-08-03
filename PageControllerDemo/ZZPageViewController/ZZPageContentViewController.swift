@@ -31,7 +31,7 @@ class ZZPageContentViewController: UIViewController {
     
     // MARK: - Helper
     
-    private func setImageView() {
+    fileprivate func setImageView() {
         let imageView = UIImageView(frame: view.bounds)
         view.addSubview(imageView)
         if imageFile != nil {
@@ -39,10 +39,10 @@ class ZZPageContentViewController: UIViewController {
         }
     }
     
-    private func setPageTitle() {
+    fileprivate func setPageTitle() {
         let titleLabel = UILabel(frame: labelFrame)
         titleLabel.text = pageTitle
-        titleLabel.textAlignment = .Center
+        titleLabel.textAlignment = .center
         view.addSubview(titleLabel)
     }
 

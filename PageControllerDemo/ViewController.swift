@@ -10,7 +10,7 @@ import UIKit
 
 class ViewController: UIViewController {
 
-    private var pageViewController: ZZPageViewController!
+    fileprivate var pageViewController: ZZPageViewController!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,7 +20,7 @@ class ViewController: UIViewController {
         pageViewController.pagesTitle = ["Page 0", "Page 1", "Page 2"]
                 
         addChildViewController(pageViewController)
-        pageViewController.didMoveToParentViewController(self)
+        pageViewController.didMove(toParentViewController: self)
         view.addSubview(pageViewController.view)
     }
 }
